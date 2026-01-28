@@ -2,93 +2,58 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Quiz App with Timer</title>
+<title>Quiz App</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-*{
-  margin:0;
-  padding:0;
-  box-sizing:border-box;
-  font-family:Arial, sans-serif;
-}
-
-body{
-  min-height:100vh;
-  background:linear-gradient(135deg,#667eea,#764ba2);
-  display:flex;
-  justify-content:center;
-  align-items:center;
-}
-
-.container{
-  background:#fff;
-  width:90%;
-  max-width:420px;
-  padding:25px;
-  border-radius:12px;
-  box-shadow:0 10px 25px rgba(0,0,0,0.2);
-  text-align:center;
-}
-
-h1{
-  margin-bottom:10px;
-}
-
-#timer{
-  font-size:16px;
-  margin-bottom:15px;
-  color:#e53e3e;
-  font-weight:bold;
-}
-
-#question{
-  font-size:18px;
-  margin-bottom:20px;
-}
-
-.options{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
-
-button{
-  padding:12px;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
-  background:#667eea;
-  color:white;
-}
-
-button:hover{
-  opacity:0.9;
-}
-
-.correct{
-  background:#48bb78 !important;
-}
-
-.wrong{
-  background:#e53e3e !important;
-}
-
-#nextBtn,#restartBtn{
-  margin-top:20px;
-  display:none;
-  background:#48bb78;
-}
+*{margin:0;padding:0;box-sizing:border-box;font-family:Arial}
+body{min-height:100vh;display:flex;justify-content:center;align-items:center;
+  background:linear-gradient(135deg,#667eea,#764ba2);transition:0.3s;}
+body.dark{background:linear-gradient(135deg,#1a202c,#2d3748)}
+.container{background:#fff;width:90%;max-width:420px;padding:25px;border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);text-align:center;transition:0.3s;}
+body.dark .container{background:#2d3748;color:#fff}
+.toggle{text-align:right;font-size:14px;cursor:pointer;margin-bottom:10px}
+#timer{color:#e53e3e;font-weight:bold}
+#count{font-size:14px;margin:8px 0}
+.progress{height:8px;background:#e2e8f0;border-radius:10px;margin-bottom:15px}
+.progress-bar{height:100%;width:0%;background:#667eea;border-radius:10px}
+body.dark .progress{background:#4a5568}
+#question{font-size:18px;margin-bottom:15px}
+.options{display:flex;flex-direction:column;gap:10px}
+button{padding:12px;border:none;border-radius:8px;background:#667eea;color:white;font-size:16px;cursor:pointer;transition:0.3s}
+button:hover{opacity:0.9}
+.correct{background:#48bb78!important}
+.wrong{background:#e53e3e!important}
+#nextBtn,#restartBtn{margin-top:15px;display:none}
+.result{display:none}
+.pass{color:#38a169}
+.fail{color:#e53e3e}
+#highScore{margin-top:10px;font-size:14px;color:#fff}
+body.dark #highScore{color:#fbd38d}
+#categorySelect{margin-bottom:15px;padding:10px;width:50%;border-radius:8px;border:1px solid #ddd;}
 </style>
 </head>
 
 <body>
-
 <div class="container">
-  <h1>Quiz App</h1>
+<div class="toggle" onclick="toggleMode()">🌙 Dark Mode</div>
+
+<h1>Quiz App</h1>
+
+<select id="categorySelect">
+  <option value="">Select Category</option>
+  <option value="HTML">HTML</option>
+  <option value="CSS">CSS</option>
+  <option value="JS">JavaScript</option>
+</select>
+<button onclick="startCategory()">Start Quiz</button>
+
+<div id="quizBox" style="display:none">
+  <div id="count"></div>
+  <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
   <div id="timer">Time: 10s</div>
-  <div id="question">Question</div>
+  <div id="question"></div>
 
   <div class="options">
     <button class="option"></button>
@@ -98,126 +63,122 @@ button:hover{
   </div>
 
   <button id="nextBtn">Next</button>
+  <div id="highScore"></div>
+</div>
+
+<div id="resultBox" class="result">
+  <h2 id="resultText"></h2>
+  <p id="scoreText"></p>
+  <p id="highScoreResult"></p>
   <button id="restartBtn">Restart</button>
+</div>
 </div>
 
 <script>
-const questions = [
-  {
-    question:"HTML stands for?",
-    options:[
-      "Hyper Text Markup Language",
-      "High Text Machine Language",
-      "Hyperlinks Text Mark Language",
-      "None"
-    ],
-    answer:0
-  },
-  {
-    question:"CSS is used for?",
-    options:["Logic","Styling","Database","Server"],
-    answer:1
-  },
-  {
-    question:"JavaScript is a ___ language?",
-    options:["Markup","Styling","Programming","Database"],
-    answer:2
-  }
+let allQuestions=[
+ {q:"HTML stands for?",o:["Hyper Text Markup Language","High Text","Hyperlink","None"],a:0,cat:"HTML"},
+ {q:"CSS is used for?",o:["Logic","Styling","Database","Server"],a:1,cat:"CSS"},
+ {q:"JavaScript is ___ language?",o:["Markup","Styling","Programming","Design"],a:2,cat:"JS"},
+ {q:"Which runs in browser?",o:["Java","C","Python","JavaScript"],a:3,cat:"JS"},
+ {q:"DOM means?",o:["Data Obj Model","Document Object Model","Design Model","None"],a:1,cat:"JS"},
+ {q:"HTML element for paragraph?",o:["<p>","<h1>","<div>","<section>"],a:0,cat:"HTML"},
+ {q:"CSS property for text color?",o:["color","font","background","text-color"],a:0,cat:"CSS"}
 ];
 
-let index=0;
-let score=0;
-let timeLeft=10;
-let timer;
+let questions=[];
+let i=0,score=0,time=10,timer;
 
-const qEl=document.getElementById("question");
-const optionBtns=document.querySelectorAll(".option");
-const nextBtn=document.getElementById("nextBtn");
-const restartBtn=document.getElementById("restartBtn");
+const q=document.getElementById("question");
+const opts=document.querySelectorAll(".option");
+const next=document.getElementById("nextBtn");
+const restart=document.getElementById("restartBtn");
 const timerEl=document.getElementById("timer");
+const count=document.getElementById("count");
+const bar=document.getElementById("progressBar");
+const quizBox=document.getElementById("quizBox");
+const resultBox=document.getElementById("resultBox");
+const resultText=document.getElementById("resultText");
+const scoreText=document.getElementById("scoreText");
+const highScoreDiv=document.getElementById("highScore");
+const highScoreResult=document.getElementById("highScoreResult");
+const categorySelect=document.getElementById("categorySelect");
 
-loadQuestion();
+let highScore=localStorage.getItem("quizHighScore") || 0;
+highScoreDiv.innerText=`High Score: ${highScore}`;
 
-function loadQuestion(){
-  reset();
-  startTimer();
-  const q=questions[index];
-  qEl.innerText=q.question;
-  optionBtns.forEach((btn,i)=>{
-    btn.innerText=q.options[i];
-    btn.onclick=()=>checkAnswer(i);
-  });
+function startCategory(){
+ let cat=categorySelect.value;
+ if(!cat) return alert("Select a category!");
+ questions=allQuestions.filter(q=>q.cat===cat);
+ questions.sort(()=>Math.random()-0.5);
+ document.querySelector("button[onclick='startCategory()']").style.display="none";
+ categorySelect.style.display="none";
+ quizBox.style.display="block";
+ load();
 }
 
-function checkAnswer(i){
-  stopTimer();
-  optionBtns.forEach(b=>b.disabled=true);
-  if(i===questions[index].answer){
-    optionBtns[i].classList.add("correct");
-    score++;
-  }else{
-    optionBtns[i].classList.add("wrong");
-    optionBtns[questions[index].answer].classList.add("correct");
-  }
-  nextBtn.style.display="block";
+function load(){
+ reset();
+ startTimer();
+ count.innerText=`Question ${i+1} of ${questions.length}`;
+ bar.style.width=`${((i+1)/questions.length)*100}%`;
+
+ let options=[...questions[i].o];
+ let correct=options[questions[i].a];
+ options.sort(()=>Math.random()-0.5);
+
+ q.innerText=questions[i].q;
+ opts.forEach((b,idx)=>{
+   b.innerText=options[idx];
+   b.onclick=()=>check(options[idx],correct,b);
+ });
+}
+
+function check(selected,correct,btn){
+ stopTimer();
+ opts.forEach(b=>b.disabled=true);
+ if(selected===correct){btn.classList.add("correct"); score++;} 
+ else{btn.classList.add("wrong"); opts.forEach(b=>{if(b.innerText===correct)b.classList.add("correct")});}
+ next.style.display="block";
 }
 
 function startTimer(){
-  timeLeft=10;
-  timerEl.innerText=`Time: ${timeLeft}s`;
-  timer=setInterval(()=>{
-    timeLeft--;
-    timerEl.innerText=`Time: ${timeLeft}s`;
-    if(timeLeft===0){
-      stopTimer();
-      autoFail();
-    }
-  },1000);
+ time=10; timerEl.innerText=`Time: ${time}s`;
+ timer=setInterval(()=>{
+   time--; timerEl.innerText=`Time: ${time}s`;
+   if(time===0){stopTimer(); autoFail();}
+ },1000);
 }
-
-function stopTimer(){
-  clearInterval(timer);
-}
+function stopTimer(){clearInterval(timer);}
 
 function autoFail(){
-  optionBtns.forEach(b=>b.disabled=true);
-  optionBtns[questions[index].answer].classList.add("correct");
-  nextBtn.style.display="block";
+ opts.forEach(b=>b.disabled=true);
+ opts.forEach(b=>{if(b.innerText===questions[i].o[questions[i].a])b.classList.add("correct");});
+ next.style.display="block";
 }
 
 function reset(){
-  nextBtn.style.display="none";
-  optionBtns.forEach(b=>{
-    b.disabled=false;
-    b.classList.remove("correct","wrong");
-  });
+ next.style.display="none";
+ opts.forEach(b=>{b.disabled=false;b.className="option";});
 }
 
-nextBtn.onclick=()=>{
-  index++;
-  if(index<questions.length){
-    loadQuestion();
-  }else{
-    showResult();
-  }
+next.onclick=()=>{
+ i++;
+ if(i<questions.length) load();
+ else showResult();
 };
 
 function showResult(){
-  qEl.innerText=`Score: ${score}/${questions.length}`;
-  timerEl.style.display="none";
-  document.querySelector(".options").innerHTML="";
-  nextBtn.style.display="none";
-  restartBtn.style.display="block";
+ quizBox.style.display="none"; resultBox.style.display="block";
+ let percent=Math.round((score/questions.length)*100);
+ scoreText.innerText=`Score: ${score}/${questions.length} (${percent}%)`;
+ resultText.innerText=percent>=50?"🎉 PASS":"❌ FAIL"; resultText.className=percent>=50?"pass":"fail";
+ if(score>highScore){localStorage.setItem("quizHighScore",score); highScoreResult.innerText=`🎯 New High Score! ${score}`;}
+ else{highScoreResult.innerText=`High Score: ${highScore}`;}
 }
 
-restartBtn.onclick=()=>{
-  index=0;
-  score=0;
-  timerEl.style.display="block";
-  restartBtn.style.display="none";
-  location.reload();
-};
+restart.onclick=()=>location.reload();
+function toggleMode(){document.body.classList.toggle("dark");}
 </script>
-
 </body>
 </html>
