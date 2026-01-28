@@ -45,10 +45,6 @@ body.dark #highScore{color:#fbd38d}
     <option value="GK">General Knowledge</option>
     <option value="Sports">Sports</option>
     <option value="Movies">Movies</option>
-    <option value="Science">Science</option>
-    <option value="History">History</option>
-    <option value="Technology">Technology</option>
-    <option value="Random">Random</option>
   </select>
 
   <button onclick="startCategory()">Start Quiz</button>
@@ -86,76 +82,29 @@ body.dark #highScore{color:#fbd38d}
 
 <script>
 let allQuestions = [
-  // ===== GK 20 =====
-  {q:"What is the capital of France?", o:["Paris","London","Berlin","Madrid"], a:0, cat:"GK"},
-  {q:"Which planet is known as the Red Planet?", o:["Earth","Mars","Jupiter","Venus"], a:1, cat:"GK"},
-  {q:"Who wrote 'Romeo and Juliet'?", o:["Shakespeare","Dickens","Hemingway","Tolkien"], a:0, cat:"GK"},
-  {q:"Which is the largest ocean on Earth?", o:["Atlantic","Indian","Arctic","Pacific"], a:3, cat:"GK"},
-  {q:"What is the chemical symbol for water?", o:["O2","H2O","CO2","NaCl"], a:1, cat:"GK"},
-  {q:"Who is known as the father of Computers?", o:["Charles Babbage","Alan Turing","Tim Berners-Lee","Steve Jobs"], a:0, cat:"GK"},
-  {q:"Which country gifted the Statue of Liberty to the USA?", o:["France","UK","Germany","Italy"], a:0, cat:"GK"},
-  {q:"What is the smallest prime number?", o:["1","2","3","0"], a:1, cat:"GK"},
-  {q:"Which is the fastest land animal?", o:["Lion","Cheetah","Horse","Tiger"], a:1, cat:"GK"},
-  {q:"What is the largest mammal?", o:["Elephant","Blue Whale","Giraffe","Hippo"], a:1, cat:"GK"},
-  {q:"Which element has the atomic number 1?", o:["Helium","Hydrogen","Oxygen","Carbon"], a:1, cat:"GK"},
-  {q:"Who discovered penicillin?", o:["Marie Curie","Alexander Fleming","Louis Pasteur","Isaac Newton"], a:1, cat:"GK"},
-  {q:"Which continent is the Sahara Desert in?", o:["Asia","Africa","Australia","Europe"], a:1, cat:"GK"},
-  {q:"Which is the largest country by area?", o:["USA","Russia","China","Canada"], a:1, cat:"GK"},
-  {q:"Who painted the Mona Lisa?", o:["Van Gogh","Picasso","Da Vinci","Rembrandt"], a:2, cat:"GK"},
-  {q:"Which gas do plants absorb from the atmosphere?", o:["Oxygen","Carbon Dioxide","Nitrogen","Hydrogen"], a:1, cat:"GK"},
-  {q:"What is the hardest natural substance?", o:["Gold","Iron","Diamond","Quartz"], a:2, cat:"GK"},
-  {q:"Which is the smallest continent?", o:["Australia","Europe","Antarctica","South America"], a:0, cat:"GK"},
-  {q:"Which planet is closest to the sun?", o:["Mercury","Venus","Earth","Mars"], a:0, cat:"GK"},
-  {q:"What is the boiling point of water in Celsius?", o:["90","80","100","120"], a:2, cat:"GK"},
+  // ===== GK 5 sample =====
+  {q:"Capital of France?", o:["Paris","London","Berlin","Madrid"], a:0, cat:"GK"},
+  {q:"Red Planet?", o:["Earth","Mars","Jupiter","Venus"], a:1, cat:"GK"},
+  {q:"Largest ocean?", o:["Atlantic","Indian","Arctic","Pacific"], a:3, cat:"GK"},
+  {q:"Father of Computers?", o:["Babbage","Turing","Jobs","Einstein"], a:0, cat:"GK"},
+  {q:"Boiling point of water?", o:["90","80","100","120"], a:2, cat:"GK"},
 
-  // ===== Sports 20 =====
-  {q:"Which sport uses a shuttlecock?", o:["Badminton","Tennis","Cricket","Squash"], a:0, cat:"Sports"},
-  {q:"How many players are there in a football team?", o:["11","9","7","12"], a:0, cat:"Sports"},
-  {q:"Which country won the 2018 FIFA World Cup?", o:["Germany","Brazil","France","Argentina"], a:2, cat:"Sports"},
-  {q:"What is the national sport of Japan?", o:["Sumo Wrestling","Karate","Baseball","Judo"], a:0, cat:"Sports"},
-  {q:"Which sport is known as 'the king of sports'?", o:["Football","Cricket","Basketball","Tennis"], a:0, cat:"Sports"},
-  {q:"Which player is called 'The King of Cricket'?", o:["Sachin Tendulkar","Virat Kohli","MS Dhoni","Brian Lara"], a:0, cat:"Sports"},
-  {q:"How many minutes are there in a standard basketball game?", o:["40","48","60","50"], a:1, cat:"Sports"},
-  {q:"Which country hosted the 2016 Olympics?", o:["China","UK","Brazil","Japan"], a:2, cat:"Sports"},
-  {q:"Which country has won the most Cricket World Cups?", o:["Australia","India","West Indies","England"], a:0, cat:"Sports"},
-  {q:"Which tennis tournament is played on clay courts?", o:["Wimbledon","French Open","US Open","Australian Open"], a:1, cat:"Sports"},
-  {q:"In which sport is the term 'hat-trick' used?", o:["Football","Cricket","Hockey","All of the above"], a:3, cat:"Sports"},
-  {q:"Which country is famous for Formula 1 racing?", o:["Italy","Germany","UK","All of the above"], a:3, cat:"Sports"},
-  {q:"Which game uses a puck?", o:["Hockey","Soccer","Basketball","Lacrosse"], a:0, cat:"Sports"},
-  {q:"Which country won the first Cricket World Cup?", o:["West Indies","Australia","India","England"], a:0, cat:"Sports"},
-  {q:"Which is the national sport of Canada?", o:["Ice Hockey","Lacrosse","Basketball","Baseball"], a:1, cat:"Sports"},
-  {q:"Who holds the record for most Olympic gold medals?", o:["Michael Phelps","Usain Bolt","Carl Lewis","Mark Spitz"], a:0, cat:"Sports"},
-  {q:"Which sport is known as 'The Gentleman's Game'?", o:["Cricket","Football","Tennis","Golf"], a:0, cat:"Sports"},
-  {q:"Which country invented table tennis?", o:["USA","China","UK","Germany"], a:2, cat:"Sports"},
-  {q:"Which sport uses a bow and arrow?", o:["Archery","Fencing","Shooting","Darts"], a:0, cat:"Sports"},
-  {q:"Which country hosted the 2014 FIFA World Cup?", o:["Brazil","Germany","South Africa","Russia"], a:0, cat:"Sports"},
+  // ===== Sports 5 sample =====
+  {q:"Uses shuttlecock?", o:["Badminton","Tennis","Cricket","Squash"], a:0, cat:"Sports"},
+  {q:"Football players per team?", o:["11","9","7","12"], a:0, cat:"Sports"},
+  {q:"Host of 2016 Olympics?", o:["China","UK","Brazil","Japan"], a:2, cat:"Sports"},
+  {q:"Hat-trick term used in?", o:["Football","Cricket","Hockey","All"], a:3, cat:"Sports"},
+  {q:"Fastest land animal?", o:["Lion","Cheetah","Horse","Tiger"], a:1, cat:"Sports"},
 
-  // ===== Movies 20 =====
-  {q:"Who directed 'Titanic'?", o:["James Cameron","Steven Spielberg","Christopher Nolan","Martin Scorsese"], a:0, cat:"Movies"},
-  {q:"Which movie features the song 'Let It Go'?", o:["Frozen","Moana","Tangled","Brave"], a:0, cat:"Movies"},
-  {q:"Who played Iron Man?", o:["Chris Hemsworth","Robert Downey Jr.","Chris Evans","Mark Ruffalo"], a:1, cat:"Movies"},
-  {q:"Which movie won Best Picture at Oscars 2020?", o:["1917","Joker","Parasite","Once Upon a Time"], a:2, cat:"Movies"},
-  {q:"Who played Jack Sparrow?", o:["Johnny Depp","Orlando Bloom","Tom Cruise","Leonardo DiCaprio"], a:0, cat:"Movies"},
-  {q:"Which movie is part of the Marvel Cinematic Universe?", o:["Inception","Avengers","Interstellar","The Matrix"], a:1, cat:"Movies"},
-  {q:"Who voiced Simba in 'The Lion King' 2019?", o:["Donald Glover","James Earl Jones","Matthew Broderick","Chiwetel Ejiofor"], a:0, cat:"Movies"},
-  {q:"Which actress starred in 'Wonder Woman'?", o:["Gal Gadot","Scarlett Johansson","Jennifer Lawrence","Emma Stone"], a:0, cat:"Movies"},
-  {q:"What is the highest-grossing film of all time?", o:["Avatar","Titanic","Avengers: Endgame","Star Wars"], a:2, cat:"Movies"},
-  {q:"Who directed 'Inception'?", o:["Christopher Nolan","Quentin Tarantino","James Cameron","Peter Jackson"], a:0, cat:"Movies"},
-  {q:"Which film features 'I am your father'?", o:["Star Wars","Star Trek","Guardians of the Galaxy","The Matrix"], a:0, cat:"Movies"},
-  {q:"Which actor plays Spider-Man in MCU?", o:["Tom Holland","Andrew Garfield","Tobey Maguire","Jake Gyllenhaal"], a:0, cat:"Movies"},
-  {q:"Which movie won the first Academy Award for Best Picture?", o:["Wings","The Jazz Singer","Sunrise","Ben-Hur"], a:0, cat:"Movies"},
-  {q:"Which movie features the DeLorean time machine?", o:["Back to the Future","Terminator","Interstellar","Ready Player One"], a:0, cat:"Movies"},
-  {q:"Who voiced Woody in 'Toy Story'?", o:["Tom Hanks","Tim Allen","Robin Williams","Billy Crystal"], a:0, cat:"Movies"},
-  {q:"Which movie is known for the line 'Here's looking at you, kid'?", o:["Casablanca","Gone with the Wind","Citizen Kane","The Godfather"], a:0, cat:"Movies"},
-  {q:"Who directed 'Avatar'?", o:["James Cameron","Steven Spielberg","Peter Jackson","Ridley Scott"], a:0, cat:"Movies"},
-  {q:"Which film is about a ship sinking in the Atlantic Ocean?", o:["Titanic","Poseidon","The Perfect Storm","Life of Pi"], a:0, cat:"Movies"},
-  {q:"Which actor played Joker in 2019 movie?", o:["Joaquin Phoenix","Heath Ledger","Jack Nicholson","Jared Leto"], a:0, cat:"Movies"},
-  {q:"Which movie franchise features Hogwarts?", o:["Harry Potter","Percy Jackson","Twilight","Lord of the Rings"], a:0, cat:"Movies"}
-  // ===== Add Science, History, Technology, Random similarly =====
+  // ===== Movies 5 sample =====
+  {q:"Directed Titanic?", o:["Cameron","Spielberg","Nolan","Scorsese"], a:0, cat:"Movies"},
+  {q:"Who played Iron Man?", o:["Hemsworth","Downey Jr.","Evans","Ruffalo"], a:1, cat:"Movies"},
+  {q:"Jack Sparrow actor?", o:["Depp","Bloom","Cruise","DiCaprio"], a:0, cat:"Movies"},
+  {q:"Line 'I am your father' movie?", o:["Star Wars","Star Trek","Matrix","Guardians"], a:0, cat:"Movies"},
+  {q:"Hogwarts featured in?", o:["Harry Potter","Percy Jackson","Twilight","LOTR"], a:0, cat:"Movies"}
 ];
 
-// -------- Quiz Logic --------
-let i=0, score=0, time=10, timer, reviewData=[];
+let questions=[], i=0, score=0, time=10, timer, reviewData=[];
 const q=document.getElementById("question");
 const opts=document.querySelectorAll(".option");
 const next=document.getElementById("nextBtn");
@@ -236,22 +185,18 @@ function startTimer(){
 }
 
 function stopTimer(){clearInterval(timer);}
-
 function autoFail(){
 	opts.forEach(b=>b.disabled=true);
 	opts.forEach(b=>{if(b.innerText===questions[i].o[questions[i].a])b.classList.add("correct");});
 	reviewData.push({question:questions[i].q,selected:"No Answer",correct:questions[i].o[questions[i].a]});
 	next.style.display="block";
 }
-
 function reset(){next.style.display="none"; opts.forEach(b=>{b.disabled=false;b.className="option";});}
-
 next.onclick=()=>{
 	i++;
 	if(i<questions.length) load();
 	else showResult();
 };
-
 function showResult(){
 	quizBox.style.display="none";
 	resultBox.style.display="block";
@@ -260,4 +205,31 @@ function showResult(){
 	resultText.innerText=percent>=50?"🎉 PASS":"❌ FAIL";
 	resultText.className=percent>=50?"pass":"fail";
 
-	let cat=categorySelect.value
+	let cat=categorySelect.value;
+	if(!highScore[cat] || score>highScore[cat]){
+	  highScore[cat]=score;
+	  localStorage.setItem("quizHighScore",JSON.stringify(highScore));
+	  highScoreResult.innerText=`🎯 New High Score! ${score}`;
+	}else{
+	  highScoreResult.innerText=`High Score: ${highScore[cat]}`;
+	}
+
+	// Badges
+	badgesDiv.innerHTML="";
+	if(percent==100) badgesDiv.innerHTML+='<span class="badge">🏆 Perfect Score</span>';
+	if(score/questions.length>=0.7) badgesDiv.innerHTML+='<span class="badge">⭐ Great Job</span>';
+
+	// Review
+	reviewDiv.innerHTML="";
+	reviewData.forEach(r=>{
+	  let div=document.createElement("div"); div.classList.add("review-answer");
+	  div.innerHTML=`Q: ${r.question} <br> Your: ${r.selected} | Correct: ${r.correct}`;
+	  reviewDiv.appendChild(div);
+	});
+}
+restart.onclick=()=>location.reload();
+function toggleMode(){document.body.classList.toggle("dark");}
+function updateHighScore(){let cat=categorySelect.value; highScoreDiv.innerText="High Score: "+(highScore[cat]||0);}
+</script>
+</body>
+</html>
