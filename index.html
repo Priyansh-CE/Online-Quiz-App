@@ -1,35 +1,223 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Online Quiz App</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>Quiz App with Timer</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  min-height:100vh;
+  background:linear-gradient(135deg,#667eea,#764ba2);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.container{
+  background:#fff;
+  width:90%;
+  max-width:420px;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 10px 25px rgba(0,0,0,0.2);
+  text-align:center;
+}
+
+h1{
+  margin-bottom:10px;
+}
+
+#timer{
+  font-size:16px;
+  margin-bottom:15px;
+  color:#e53e3e;
+  font-weight:bold;
+}
+
+#question{
+  font-size:18px;
+  margin-bottom:20px;
+}
+
+.options{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+button{
+  padding:12px;
+  border:none;
+  border-radius:8px;
+  font-size:16px;
+  cursor:pointer;
+  background:#667eea;
+  color:white;
+}
+
+button:hover{
+  opacity:0.9;
+}
+
+.correct{
+  background:#48bb78 !important;
+}
+
+.wrong{
+  background:#e53e3e !important;
+}
+
+#nextBtn,#restartBtn{
+  margin-top:20px;
+  display:none;
+  background:#48bb78;
+}
+</style>
 </head>
+
 <body>
 
-  <div class="quiz-box">
-    <h2>Online Quiz App</h2>
+<div class="container">
+  <h1>Quiz App</h1>
+  <div id="timer">Time: 10s</div>
+  <div id="question">Question</div>
 
-    <!-- Question -->
-    <div id="question">
-      Question will appear here
-    </div>
-
-    <!-- Options -->
-    <div class="options">
-      <button class="option">Option 1</button>
-      <button class="option">Option 2</button>
-      <button class="option">Option 3</button>
-      <button class="option">Option 4</button>
-    </div>
-
-    <!-- Footer -->
-    <div class="footer">
-      <span id="progress">Question 1 of 5</span>
-      <button id="nextBtn">Next</button>
-    </div>
+  <div class="options">
+    <button class="option"></button>
+    <button class="option"></button>
+    <button class="option"></button>
+    <button class="option"></button>
   </div>
+
+  <button id="nextBtn">Next</button>
+  <button id="restartBtn">Restart</button>
+</div>
+
+<script>
+const questions = [
+  {
+    question:"HTML stands for?",
+    options:[
+      "Hyper Text Markup Language",
+      "High Text Machine Language",
+      "Hyperlinks Text Mark Language",
+      "None"
+    ],
+    answer:0
+  },
+  {
+    question:"CSS is used for?",
+    options:["Logic","Styling","Database","Server"],
+    answer:1
+  },
+  {
+    question:"JavaScript is a ___ language?",
+    options:["Markup","Styling","Programming","Database"],
+    answer:2
+  }
+];
+
+let index=0;
+let score=0;
+let timeLeft=10;
+let timer;
+
+const qEl=document.getElementById("question");
+const optionBtns=document.querySelectorAll(".option");
+const nextBtn=document.getElementById("nextBtn");
+const restartBtn=document.getElementById("restartBtn");
+const timerEl=document.getElementById("timer");
+
+loadQuestion();
+
+function loadQuestion(){
+  reset();
+  startTimer();
+  const q=questions[index];
+  qEl.innerText=q.question;
+  optionBtns.forEach((btn,i)=>{
+    btn.innerText=q.options[i];
+    btn.onclick=()=>checkAnswer(i);
+  });
+}
+
+function checkAnswer(i){
+  stopTimer();
+  optionBtns.forEach(b=>b.disabled=true);
+  if(i===questions[index].answer){
+    optionBtns[i].classList.add("correct");
+    score++;
+  }else{
+    optionBtns[i].classList.add("wrong");
+    optionBtns[questions[index].answer].classList.add("correct");
+  }
+  nextBtn.style.display="block";
+}
+
+function startTimer(){
+  timeLeft=10;
+  timerEl.innerText=`Time: ${timeLeft}s`;
+  timer=setInterval(()=>{
+    timeLeft--;
+    timerEl.innerText=`Time: ${timeLeft}s`;
+    if(timeLeft===0){
+      stopTimer();
+      autoFail();
+    }
+  },1000);
+}
+
+function stopTimer(){
+  clearInterval(timer);
+}
+
+function autoFail(){
+  optionBtns.forEach(b=>b.disabled=true);
+  optionBtns[questions[index].answer].classList.add("correct");
+  nextBtn.style.display="block";
+}
+
+function reset(){
+  nextBtn.style.display="none";
+  optionBtns.forEach(b=>{
+    b.disabled=false;
+    b.classList.remove("correct","wrong");
+  });
+}
+
+nextBtn.onclick=()=>{
+  index++;
+  if(index<questions.length){
+    loadQuestion();
+  }else{
+    showResult();
+  }
+};
+
+function showResult(){
+  qEl.innerText=`Score: ${score}/${questions.length}`;
+  timerEl.style.display="none";
+  document.querySelector(".options").innerHTML="";
+  nextBtn.style.display="none";
+  restartBtn.style.display="block";
+}
+
+restartBtn.onclick=()=>{
+  index=0;
+  score=0;
+  timerEl.style.display="block";
+  restartBtn.style.display="none";
+  location.reload();
+};
+</script>
 
 </body>
 </html>
